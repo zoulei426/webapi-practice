@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>YuLinTu.Practice</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AutoMapper" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YuLinTu.Practice.Application.Contracts\YuLinTu.Practice.Application.Contracts.csproj" />
+    <ProjectReference Include="..\YuLinTu.Practice.Domain\YuLinTu.Practice.Domain.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>YuLinTu.Practice</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="4.0.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.0.2" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="4.0.2" />
+    <PackageReference Include="Volo.Abp.Caching" Version="4.0.2" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YuLinTu.Practice.Application\YuLinTu.Practice.Application.csproj" />
+    <ProjectReference Include="..\YuLinTu.Practice.EntityFrameworkCore.DbMigrations\YuLinTu.Practice.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\YuLinTu.Practice.EntityFrameworkCore\YuLinTu.Practice.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\YuLinTu.Practice.HttpApi\YuLinTu.Practice.HttpApi.csproj" />
+  </ItemGroup>
+</Project>
