@@ -3,7 +3,7 @@
  * @Author: zoulei
  * @Date: 2020-12-18 13:26:04
  * @LastEditors: zoulei
- * @LastEditTime: 2020-12-21 17:03:29
+ * @LastEditTime: 2020-12-21 17:29:54
 -->
 
 # 基于 ABP vNext 的 Web API 开发教程
@@ -19,8 +19,6 @@
     - [2.1 先决条件](#21-先决条件)
     - [2.2 安装 .NET 5.0](#22-安装-net-50)
     - [2.3 安装 Visual Studio Preview](#23-安装-visual-studio-preview)
-    - [2.4 安装 ABP](#24-安装-abp)
-    - [2.5 安装 Postgresql](#25-安装-postgresql)
   - [3 创建项目](#3-创建项目)
     - [3.1 搭建领域层](#31-搭建领域层)
     - [3.2 创建领域层实体](#32-创建领域层实体)
@@ -37,13 +35,16 @@
     - [3.13 迁移数据](#313-迁移数据)
     - [3.14 运行](#314-运行)
   - [4 测试](#4-测试)
-    - [4.1 领域层单元测试](#41-领域层单元测试)
-    - [4.2 应用层单元测试](#42-应用层单元测试)
-    - [4.3 Swagger](#43-swagger)
+    - [4.1 单元测试](#41-单元测试)
+    - [4.1 搭建 EntityFrameworkCore 测试](#41-搭建-entityframeworkcore-测试)
+    - [4.2 搭建领域层测试](#42-搭建领域层测试)
+    - [4.3 搭建应用层测试](#43-搭建应用层测试)
     - [4.4 Postman](#44-postman)
   - [5 搭建 CI/CD](#5-搭建-cicd)
     - [5.1 Docker](#51-docker)
     - [5.2 Jenkins](#52-jenkins)
+    - [6 快速创建项目](#6-快速创建项目)
+    - [6.1 安装 ABP CLI](#61-安装-abp-cli)
   - [参考文献](#参考文献)
 
 <!-- /TOC -->
@@ -65,34 +66,17 @@
 
 ### 2.1 先决条件
 
-- .NET Core 3.1 或更高版本（推荐 .NET 5.0 SDK）
-- 具有“ASP.NET 和 Web 开发”工作负载的 Visual Studio 2019 16.4 或更高版本
+- .NET 5.0 SDK 或更高版本
+- 具有“ASP.NET 和 Web 开发”工作负载的 Visual Studio 2019 16.8 或更高版本
+- Postgresql 9.2 或更高版本
 
 ### 2.2 安装 .NET 5.0
 
-*若使用 .NET Core 3.1 开发，请忽略此步骤。*  
 [.NET 5.0 SDK 下载](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 ### 2.3 安装 Visual Studio Preview
 
-*若使用 .NET Core 3.1 开发，请忽略此步骤。*  
 [Visual Studio Preview 下载](https://visualstudio.microsoft.com/zh-hans/vs/preview/)
-
-### 2.4 安装 ABP
-
-安装 ABP CLI
-
-```cmd
-dotnet tool install -g Volo.Abp.Cli
-```
-
-或升级至最新版本。
-
-```cmd
-dotnet tool update -g Volo.Abp.Cli
-```
-
-### 2.5 安装 Postgresql
 
 ## 3 创建项目
 
@@ -101,7 +85,6 @@ dotnet tool update -g Volo.Abp.Cli
 ```cmd
 abp new YuLinTu.Practice --ui none
 ```
-
 
 ### 3.1 搭建领域层
 
@@ -128,7 +111,7 @@ namespace YuLinTu.Practice
 }
 ```
 
-新建一个基于 .NET Core 3.1 / .NET 5.0 的类库 YuLinTu.Practice.Domain，并修改默认命名空间为 YuLinTu.Practice。
+新建一个基于 .NET 5.0 的类库 YuLinTu.Practice.Domain，并修改默认命名空间为 YuLinTu.Practice。
 
 在 YuLinTu.Practice.Domain 项目中引用 YuLinTu.Practice.Domain.Shared 项目，并安装 ABP 组件：
 
@@ -197,7 +180,7 @@ namespace YuLinTu.Practice.Books
 
 ### 3.3 搭建 Entity Framework Core
 
-新建一个基于 .NET Core 3.1 / .NET 5.0 的类库 YuLinTu.Practice.EntityFrameworkCore，并修改默认命名空间为 YuLinTu.Practice。
+新建一个基于 .NET 5.0 的类库 YuLinTu.Practice.EntityFrameworkCore，并修改默认命名空间为 YuLinTu.Practice。
 
 在 YuLinTu.Practice.EntityFrameworkCore 项目中引用 YuLinTu.Practice.Domain 项目，并安装 ABP 组件：
 
@@ -338,9 +321,9 @@ namespace YuLinTu.Practice.EntityFrameworkCore
 
 ### 3.5 搭建数据迁移
 
-*若项目是 DbFirst，可以忽略数据迁移步骤。*
+> *若项目是 DbFirst，可以忽略数据迁移步骤。*
 
-新建一个基于 .NET Core 3.1 / .NET 5.0 的类库 YuLinTu.Practice.EntityFrameworkCore.DbMigrations，并修改默认命名空间为 YuLinTu.Practice。
+新建一个基于 .NET 5.0 的类库 YuLinTu.Practice.EntityFrameworkCore.DbMigrations，并修改默认命名空间为 YuLinTu.Practice。
 
 在空 YuLinTu.Practice.EntityFrameworkCore.DbMigrations 项目中引用 YuLinTu.Practice.EntityFrameworkCore 项目，并安装 EF Core 组件：
 
@@ -415,7 +398,7 @@ namespace YuLinTu.Practice
 }
 ```
 
-新建一个基于 .NET Core 3.1 / .NET 5.0 的类库 YuLinTu.Practice.Application，并修改默认命名空间为 YuLinTu.Practice。
+新建一个基于 .NET 5.0 的类库 YuLinTu.Practice.Application，并修改默认命名空间为 YuLinTu.Practice。
 
 在 YuLinTu.Practice.Application 项目中引用 YuLinTu.Practice.Application.Contracts、YuLinTu.Practice.Domain 项目，并安装 ABP 组件：
 
@@ -573,7 +556,7 @@ namespace YuLinTu.Practice.Books
 
 ### 3.10 搭建控制器层
 
-新建一个基于 .NET Core 3.1 / .NET 5.0 的类库 YuLinTu.Practice.HttpApi，并修改默认命名空间为 YuLinTu.Practice。
+新建一个基于 .NET 5.0 的类库 YuLinTu.Practice.HttpApi，并修改默认命名空间为 YuLinTu.Practice。
 
 在 YuLinTu.Practice.HttpApi 项目中引用 YuLinTu.Practice.Application.Contracts 项目，并安装 ABP 组件：
 
@@ -636,14 +619,13 @@ namespace YuLinTu.Practice.Controllers
 在 YuLinTu.Practice.HttpApi.Host 项目中引用 YuLinTu.Practice.Application、YuLinTu.Practice.EntityFrameworkCore、YuLinTu.Practice.EntityFrameworkCore.DbMigrations、YuLinTu.Practice.HttpApi 项目，并安装 ABP 组件：
 
 ```PM
-Install-Package Microsoft.Extensions.Hosting
 Install-Package Microsoft.EntityFrameworkCore.Tools
 Install-Package Serilog.AspNetCore
 Install-Package Serilog.Sinks.Async
 Install-Package Volo.Abp.Autofac
-Install-Package Volo.Abp.AspNetCore.Serilog
 Install-Package Volo.Abp.Caching
 Install-Package Volo.Abp.Swashbuckle
+Install-Package Volo.Abp.AspNetCore.Serilog
 Install-Package Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
 ```
 
@@ -929,19 +911,371 @@ Update-Database
 
 ## 4 测试
 
-### 4.1 领域层单元测试
+### 4.1 单元测试
 
-### 4.2 应用层单元测试
+将第3节创建的项目移动到 src 目录下，再新建 test 文件夹，在此文件夹下创建单元测试项目。
 
-### 4.3 Swagger
+新建一个基于 xunit 的测试项目 YuLinTu.Practice.TestBase，并修改默认命名空间为 YuLinTu.Practice。
+
+在 YuLinTu.Practice.TestBase 项目中引用 YuLinTu.Practice.Domain 项目，并安装 ABP 组件：
+
+```PM
+Install-Package xunit.extensibility.execution
+Install-Package NSubstitute
+Install-Package Shouldly
+Install-Package Volo.Abp.TestBase
+Install-Package Volo.Abp.Autofac
+```
+
+新建类 PracticeTestBaseModule 继承于 AbpModule：
+
+```c#
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.Autofac;
+using Volo.Abp.Data;
+using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
+
+namespace YuLinTu.Practice
+{
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(PracticeDomainModule)
+        )]
+    public class PracticeTestBaseModule : AbpModule
+    {
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            // 添加测试种子数据
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            AsyncHelper.RunSync(async () =>
+            {
+                using (var scope = context.ServiceProvider.CreateScope())
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
+                }
+            });
+        }
+    }
+}
+```
+
+新建测试基类 PracticeTestBase：
+
+```c#
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
+using Volo.Abp.Uow;
+
+namespace YuLinTu.Practice
+{
+    public abstract class PracticeTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
+         where TStartupModule : IAbpModule
+    {
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
+
+        protected virtual Task WithUnitOfWorkAsync(Func<Task> func)
+        {
+            return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
+        }
+
+        protected virtual async Task WithUnitOfWorkAsync(AbpUnitOfWorkOptions options, Func<Task> action)
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                using (var uow = uowManager.Begin(options))
+                {
+                    await action();
+
+                    await uow.CompleteAsync();
+                }
+            }
+        }
+
+        protected virtual Task<TResult> WithUnitOfWorkAsync<TResult>(Func<Task<TResult>> func)
+        {
+            return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
+        }
+
+        protected virtual async Task<TResult> WithUnitOfWorkAsync<TResult>(AbpUnitOfWorkOptions options, Func<Task<TResult>> func)
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                using (var uow = uowManager.Begin(options))
+                {
+                    var result = await func();
+                    await uow.CompleteAsync();
+                    return result;
+                }
+            }
+        }
+    }
+}
+```
+
+### 4.1 搭建 EntityFrameworkCore 测试
+
+新建一个基于 xunit 的测试项目 YuLinTu.Practice.EntityFrameworkCore.Tests，并修改默认命名空间为 YuLinTu.Practice。
+
+在 YuLinTu.Practice.EntityFrameworkCore.Tests 项目中引用 YuLinTu.Practice.EntityFrameworkCore.DbMigrations、YuLinTu.Practice.TestBase 项目，并安装 ABP 组件：
+
+```PM
+Install-Package Volo.Abp.EntityFrameworkCore.Sqlite
+```
+
+新建类 PracticeEntityFrameworkCoreTestModule 继承于 AbpModule，此类中配置 Sqlite 内存数据库作为测试的数据源：
+
+```c#
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
+using Volo.Abp.Modularity;
+using YuLinTu.Practice.EntityFrameworkCore;
+
+namespace YuLinTu.Practice
+{
+    [DependsOn(
+        typeof(PracticeEntityFrameworkCoreDbMigrationsModule),
+        typeof(PracticeTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
+        )]
+    public class PracticeEntityFrameworkCoreTestModule : AbpModule
+    {
+        private SqliteConnection _sqliteConnection;
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            ConfigureInMemorySqlite(context.Services);
+        }
+
+        private void ConfigureInMemorySqlite(IServiceCollection services)
+        {
+            _sqliteConnection = CreateDatabaseAndGetConnection();
+
+            services.Configure<AbpDbContextOptions>(options =>
+            {
+                options.Configure(context =>
+                {
+                    context.DbContextOptions.UseSqlite(_sqliteConnection);
+                });
+            });
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            _sqliteConnection.Dispose();
+        }
+
+        private static SqliteConnection CreateDatabaseAndGetConnection()
+        {
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+
+            var options = new DbContextOptionsBuilder<PracticeMigrationsDbContext>()
+                .UseSqlite(connection)
+                .Options;
+
+            using (var context = new PracticeMigrationsDbContext(options))
+            {
+                context.GetService<IRelationalDatabaseCreator>().CreateTables();
+            }
+
+            return connection;
+        }
+    }
+}
+```
+
+### 4.2 搭建领域层测试
+
+新建一个基于 xunit 的测试项目 YuLinTu.Practice.Domain.Tests，并修改默认命名空间为 YuLinTu.Practice。
+
+在 YuLinTu.Practice.Domain.Tests 项目中引用 YuLinTu.Practice.EntityFrameworkCore.Tests 项目。
+
+新建类 PracticeEntityFrameworkCoreTestModule 继承于 AbpModule：
+
+```c#
+using Volo.Abp.Modularity;
+
+namespace YuLinTu.Practice
+{
+    [DependsOn(typeof(PracticeEntityFrameworkCoreTestModule))]
+    public class PracticeDomainTestModule : AbpModule
+    {
+    }
+}
+```
+
+新建领域层测试基类 PracticeDomainTestBase：
+
+```c#
+namespace YuLinTu.Practice
+{
+    public abstract class PracticeDomainTestBase : PracticeTestBase<PracticeDomainTestModule>
+    {
+    }
+}
+```
+
+新建 Book 的测试类 BookRepositoryTests：
+
+```c#
+using Shouldly;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+using Xunit;
+
+namespace YuLinTu.Practice.Books
+{
+    public class BookRepositoryTests : PracticeDomainTestBase
+    {
+        private readonly IRepository<Book, Guid> bookRepository;
+
+        public BookRepositoryTests()
+        {
+            bookRepository = GetRequiredService<IRepository<Book, Guid>>();
+        }
+
+        [Fact]
+        public async Task Should_Create_A_Book()
+        {
+            var book = new Book
+            {
+                Name = "大话设计模式",
+                Type = BookType.Science,
+                PublishDate = new DateTime(2007, 12, 1)
+            };
+
+            var result = await bookRepository.InsertAsync(book, true);
+
+            result.Id.ShouldNotBe(Guid.Empty);
+        }
+    }
+}
+```
+
+此时可在测试资源管理器内进行领域层的测试。
+
+### 4.3 搭建应用层测试
+
+新建一个基于 xunit 的测试项目 YuLinTu.Practice.Application.Tests，并修改默认命名空间为 YuLinTu.Practice。
+
+在 YuLinTu.Practice.Application.Tests 项目中引用 YuLinTu.Practice.Application、YuLinTu.Practice.Domain.Tests 项目。
+
+新建类 PracticeApplicationTestModule 继承于 AbpModule：
+
+```c#
+using Volo.Abp.Modularity;
+
+namespace YuLinTu.Practice
+{
+    [DependsOn(
+       typeof(PracticeApplicationModule),
+       typeof(PracticeDomainTestModule)
+       )]
+    public class PracticeApplicationTestModule : AbpModule
+    {
+    }
+}
+```
+
+新应用层测试基类 PracticeApplicationTestBase：
+
+```c#
+namespace YuLinTu.Practice
+{
+    public abstract class PracticeApplicationTestBase : PracticeTestBase<PracticeApplicationTestModule>
+    {
+    }
+}
+```
+
+新建 Book 的测试类 BookAppServiceTests：
+
+```c#
+using Shouldly;
+using System;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace YuLinTu.Practice.Books
+{
+    public class BookAppServiceTests : PracticeApplicationTestBase
+    {
+        private readonly IBookAppService bookAppService;
+
+        public BookAppServiceTests()
+        {
+            bookAppService = GetRequiredService<IBookAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Create_A_Book()
+        {
+            var book = new CreateUpdateBookDto
+            {
+                Name = "大话设计模式",
+                Type = BookType.Science,
+                PublishDate = new DateTime(2007, 12, 1)
+            };
+
+            var result = await bookAppService.CreateAsync(book);
+
+            result.Id.ShouldNotBe(Guid.Empty);
+        }
+    }
+}
+```
 
 ### 4.4 Postman
+
 
 ## 5 搭建 CI/CD
 
 ### 5.1 Docker
 
 ### 5.2 Jenkins
+
+### 6 快速创建项目
+
+### 6.1 安装 ABP CLI
+
+安装 ABP CLI
+
+```cmd
+dotnet tool install -g Volo.Abp.Cli
+```
+
+或升级至最新版本。
+
+```cmd
+dotnet tool update -g Volo.Abp.Cli
+```
 
 ## 参考文献
 
