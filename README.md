@@ -303,7 +303,7 @@ namespace YuLinTu.Practice.EntityFrameworkCore
         public PracticeMigrationsDbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<PracticeMigrationsDbContext>()
-                .UseNpgsql("Server=127.0.0.1;Port=5432;Database=xmxf;User Id=postgres;Password=123456;");
+                .UseNpgsql("Server=127.0.0.1;Port=5432;Database=practice;User Id=postgres;Password=123456;");
 
             return new PracticeMigrationsDbContext(builder.Options);
         }
@@ -1258,8 +1258,7 @@ Get 请求：
 
 Post 请求：  
 > 选择 POST，输入 http://localhost:5001/api/app/book  
-> 切换到 Body，选择 raw
-> 输入：
+> 切换到 Body，选择 raw，再选择 JSON 格式，输入：
 > ```json
 > {
 >   "name": "大话设计模式",
