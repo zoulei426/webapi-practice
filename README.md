@@ -36,15 +36,13 @@
     - [3.14 运行](#314-运行)
   - [4 测试](#4-测试)
     - [4.1 单元测试](#41-单元测试)
-    - [4.1 搭建 EntityFrameworkCore 测试](#41-搭建-entityframeworkcore-测试)
-    - [4.2 搭建领域层测试](#42-搭建领域层测试)
-    - [4.3 搭建应用层测试](#43-搭建应用层测试)
-    - [4.4 Postman](#44-postman)
+    - [4.2 搭建 EntityFrameworkCore 测试](#42-搭建-entityframeworkcore-测试)
+    - [4.3 搭建领域层测试](#43-搭建领域层测试)
+    - [4.4 搭建应用层测试](#44-搭建应用层测试)
+    - [4.5 Postman](#45-postman)
   - [5 搭建 CI/CD](#5-搭建-cicd)
     - [5.1 Docker](#51-docker)
     - [5.2 Jenkins](#52-jenkins)
-    - [6 快速创建项目](#6-快速创建项目)
-    - [6.1 安装 ABP CLI](#61-安装-abp-cli)
   - [参考文献](#参考文献)
 
 <!-- /TOC -->
@@ -79,12 +77,6 @@
 [Visual Studio Preview 下载](https://visualstudio.microsoft.com/zh-hans/vs/preview/)
 
 ## 3 创建项目
-
-使用ABP CLI的 new 命令创建新项目。
-
-```cmd
-abp new YuLinTu.Practice --ui none
-```
 
 ### 3.1 搭建领域层
 
@@ -1032,7 +1024,7 @@ namespace YuLinTu.Practice
 }
 ```
 
-### 4.1 搭建 EntityFrameworkCore 测试
+### 4.2 搭建 EntityFrameworkCore 测试
 
 新建一个基于 xunit 的测试项目 YuLinTu.Practice.EntityFrameworkCore.Tests，并修改默认命名空间为 YuLinTu.Practice。
 
@@ -1110,7 +1102,7 @@ namespace YuLinTu.Practice
 }
 ```
 
-### 4.2 搭建领域层测试
+### 4.3 搭建领域层测试
 
 新建一个基于 xunit 的测试项目 YuLinTu.Practice.Domain.Tests，并修改默认命名空间为 YuLinTu.Practice。
 
@@ -1181,7 +1173,7 @@ namespace YuLinTu.Practice.Books
 
 此时可在测试资源管理器内进行领域层的测试。
 
-### 4.3 搭建应用层测试
+### 4.4 搭建应用层测试
 
 新建一个基于 xunit 的测试项目 YuLinTu.Practice.Application.Tests，并修改默认命名空间为 YuLinTu.Practice。
 
@@ -1252,7 +1244,31 @@ namespace YuLinTu.Practice.Books
 }
 ```
 
-### 4.4 Postman
+### 4.5 Postman
+
+安装 Postman：
+
+[Postman 下载](https://www.postman.com/downloads/)
+
+运行 YuLinTu.Practice.HttpApi.Host 项目，运行 Postman。
+
+Get 请求：  
+> 输入 http://localhost:5001/api/app/book  
+> 点击 Send 发送请求
+
+Post 请求：  
+> 选择 POST，输入 http://localhost:5001/api/app/book  
+> 切换到 Body，选择 raw
+> 输入：
+> ```json
+> {
+>   "name": "大话设计模式",
+>   "type": 6,
+>   "publishDate": "2007-12-01",
+>   "price": 45
+> }
+> ```
+> 点击 Send 发送请求
 
 
 ## 5 搭建 CI/CD
@@ -1260,22 +1276,6 @@ namespace YuLinTu.Practice.Books
 ### 5.1 Docker
 
 ### 5.2 Jenkins
-
-### 6 快速创建项目
-
-### 6.1 安装 ABP CLI
-
-安装 ABP CLI
-
-```cmd
-dotnet tool install -g Volo.Abp.Cli
-```
-
-或升级至最新版本。
-
-```cmd
-dotnet tool update -g Volo.Abp.Cli
-```
 
 ## 参考文献
 
