@@ -3,7 +3,7 @@
  * @Author: zoulei
  * @Date: 2020-12-18 13:26:04
  * @LastEditors: zoulei
- * @LastEditTime: 2020-12-21 17:29:54
+ * @LastEditTime: 2020-12-23 09:37:22
 -->
 
 # 基于 ABP vNext 的 Web API 开发教程
@@ -150,6 +150,10 @@ namespace YuLinTu.Practice.Books
 }
 ```
 
+- ABP 为实体提供了两个基本的基类: AggregateRoot 和 Entity。AggregateRoot 即领域驱动设计中的聚合根 [^AggregateRoot]。
+- Audited 前缀在 AggregateRoot / Entity 类的基础上添加了一些审计属性(CreationTime, CreatorId, LastModificationTime 等)。
+- Guid 是 Book 实体的主键类型。**不要为你的实体使用 Guid.NewGuid() 创建 ID，当需要手动设置实体的 ID 时,请使用 IGuidGenerator.Create()。**
+
 在 YuLinTu.Practice.Domain.Shared 项目中新建 Books 目录并创建 BookType 枚举：
 
 ```c#
@@ -170,6 +174,9 @@ namespace YuLinTu.Practice.Books
 }
 ```
 
+
+[^AggregateRoot]: 如果把聚合比作组织，聚合根则是组织的负责人，聚合根也叫做根实体，它不仅仅是实体，还是实体的管理者。让实体和值对象协同工作的组织就是聚合，用来确保这些领域对象在实现公共的业务逻辑的时候，可以保持数据的一致性。
+
 ### 3.3 搭建 Entity Framework Core
 
 新建一个基于 .NET 5.0 的类库 YuLinTu.Practice.EntityFrameworkCore，并修改默认命名空间为 YuLinTu.Practice。
@@ -182,7 +189,7 @@ Install-Package Volo.Abp.EntityFrameworkCore.PostgreSql
 Install-Package Volo.Abp.AuditLogging.EntityFrameworkCore
 ```
 
-新建文件夹 EntityFrameworkCore 并创建类 PracticeEntityFrameworkCoreModule 继承于 AbpModule，并添加 PracticeDomainModule、AbpEntityFrameworkCorePostgreSqlModule 模块：
+新建文件夹 EntityFrameworkCore 并创建类 PracticeEntityFrameworkCoreModule 继承于 AbpModule，并添加 PracticeDomainModule, AbpEntityFrameworkCorePostgreSqlModule 模块：
 
 ```c#
 using Microsoft.Extensions.DependencyInjection;
@@ -290,7 +297,9 @@ namespace YuLinTu.Practice.EntityFrameworkCore
 }
 ```
 
-新建类 PracticeMigrationsDbContextFactory，用于执行 EF Core 的 Add-Migration、Update-Database 等命令：
+- ConfigureByConvention() 方法自动映射继承的属性。
+
+新建类 PracticeMigrationsDbContextFactory，用于执行 EF Core 的 Add-Migration, Update-Database 等命令：
 
 ```c#
 using Microsoft.EntityFrameworkCore;
@@ -392,13 +401,13 @@ namespace YuLinTu.Practice
 
 新建一个基于 .NET 5.0 的类库 YuLinTu.Practice.Application，并修改默认命名空间为 YuLinTu.Practice。
 
-在 YuLinTu.Practice.Application 项目中引用 YuLinTu.Practice.Application.Contracts、YuLinTu.Practice.Domain 项目，并安装 ABP 组件：
+在 YuLinTu.Practice.Application 项目中引用 YuLinTu.Practice.Application.Contracts, YuLinTu.Practice.Domain 项目，并安装 ABP 组件：
 
 ```PM
 Install-Package Volo.Abp.AutoMapper
 ```
 
-新建类 PracticeApplicationModule 继承于 AbpModule，并添加 PracticeApplicationContractsModule、PracticeDomainSharedModule、AbpAutoMapperModule 模块：
+新建类 PracticeApplicationModule 继承于 AbpModule，并添加 PracticeApplicationContractsModule, PracticeDomainSharedModule, AbpAutoMapperModule 模块：
 
 ```c#
 using Volo.Abp.AutoMapper;
@@ -449,6 +458,13 @@ namespace YuLinTu.Practice.Books
 }
 ```
 
+- BookDto 继承自 AuditedEntityDto<Guid>，跟之前定义的 Book 实体一样具有一些审计属性。
+- 数据传输对象（DTO）用于在应用层和表示层或其他类型的客户端之间传输数据。
+- DTO 应该是可序列化的。
+- 除验证代码外，不应包含任何业务逻辑。
+- DTO 不要继承实体，也不要引用实体。
+- BookDto 属于输出 DTO，请尽量**重用输出 DTO**。
+
 创建 CreateUpdateBookDto。
 
 ```c#
@@ -476,6 +492,9 @@ namespace YuLinTu.Practice.Books
 }
 ```
 
+- CreateUpdateBookDto 包括了创建与更新，在实际项目中，请尽量拆分成CreateDto 与 UpdateDto。
+- CreateDto 与 UpdateDto 属于输入DTO，请不要在不同的应用程序服务方法之间重用输入 DTO。
+
 ### 3.8 创建 DTO 与实体的映射
 
 在 YuLinTu.Practice.Application 项目中创建 BookStoreApplicationAutoMapperProfile 类中定义实体与DTO的映射。
@@ -496,6 +515,8 @@ namespace YuLinTu.Practice
     }
 }
 ```
+
+- 将书籍返回到表示层时，需要将 Book 实体转换为 BookDto 对象，从表示层输入的 CreateUpdateBookDto 也需要转换为 Book 实体。AutoMapper 库可以在定义了正确的映射时自动执行此转换，有关 AutoMapper 更多内容，请查阅参考文档。
 
 ### 3.9 创建应用服务
 
@@ -518,6 +539,9 @@ namespace YuLinTu.Practice.Books
     }
 }
 ```
+
+- ICrudAppService 定义了常见的 CRUD 方法：GetAsync, GetListAsync, CreateAsync, UpdateAsync 和 DeleteAsync. 你可以从空的IApplicationService 接口继承并手动定义自己的方法。
+- PagedAndSortedResultRequestDto 实现了 IPagedResultRequest, ISortedResultRequest 接口，包括了分页与排序所需的属性：MaxResultCount, SkipCount, Sorting。
 
 在 YuLinTu.Practice.Application 项目中创建名为 BookAppService 的 IBookAppService 实现。
 
@@ -556,7 +580,7 @@ namespace YuLinTu.Practice.Books
 Install-Package Volo.Abp.AspNetCore.Mvc
 ```
 
-新建类 PracticeHttpApiModule 继承于 AbpModule，并添加 PracticeApplicationContractsModule、AbpAspNetCoreMvcModule模块：
+新建类 PracticeHttpApiModule 继承于 AbpModule，并添加 PracticeApplicationContractsModule, AbpAspNetCoreMvcModule模块：
 
 ```c#
 using Volo.Abp.AspNetCore.Mvc;
@@ -608,7 +632,7 @@ namespace YuLinTu.Practice.Controllers
 
 新建一个基于 ASP.NET Core Web 的应用程序 YuLinTu.Practice.HttpApi.Host，选择空模板，取消 HTTPS 配置，并修改默认命名空间为 YuLinTu.Practice。
 
-在 YuLinTu.Practice.HttpApi.Host 项目中引用 YuLinTu.Practice.Application、YuLinTu.Practice.EntityFrameworkCore、YuLinTu.Practice.EntityFrameworkCore.DbMigrations、YuLinTu.Practice.HttpApi 项目，并安装 ABP 组件：
+在 YuLinTu.Practice.HttpApi.Host 项目中引用 YuLinTu.Practice.Application, YuLinTu.Practice.EntityFrameworkCore, YuLinTu.Practice.EntityFrameworkCore.DbMigrations, YuLinTu.Practice.HttpApi 项目，并安装 ABP 组件：
 
 ```PM
 Install-Package Microsoft.EntityFrameworkCore.Tools
@@ -1028,7 +1052,7 @@ namespace YuLinTu.Practice
 
 新建一个基于 xunit 的测试项目 YuLinTu.Practice.EntityFrameworkCore.Tests，并修改默认命名空间为 YuLinTu.Practice。
 
-在 YuLinTu.Practice.EntityFrameworkCore.Tests 项目中引用 YuLinTu.Practice.EntityFrameworkCore.DbMigrations、YuLinTu.Practice.TestBase 项目，并安装 ABP 组件：
+在 YuLinTu.Practice.EntityFrameworkCore.Tests 项目中引用 YuLinTu.Practice.EntityFrameworkCore.DbMigrations, YuLinTu.Practice.TestBase 项目，并安装 ABP 组件：
 
 ```PM
 Install-Package Volo.Abp.EntityFrameworkCore.Sqlite
@@ -1177,7 +1201,7 @@ namespace YuLinTu.Practice.Books
 
 新建一个基于 xunit 的测试项目 YuLinTu.Practice.Application.Tests，并修改默认命名空间为 YuLinTu.Practice。
 
-在 YuLinTu.Practice.Application.Tests 项目中引用 YuLinTu.Practice.Application、YuLinTu.Practice.Domain.Tests 项目。
+在 YuLinTu.Practice.Application.Tests 项目中引用 YuLinTu.Practice.Application, YuLinTu.Practice.Domain.Tests 项目。
 
 新建类 PracticeApplicationTestModule 继承于 AbpModule：
 
@@ -1280,3 +1304,4 @@ Post 请求：
 
 - [Mircrosoft Docs](https://docs.microsoft.com/zh-cn/aspnet/core/web-api/?view=aspnetcore-5.0)
 - [ABP Framework Docs](https://docs.abp.io/zh-Hans/abp/latest/Getting-Started?UI=MVC&DB=EF&Tiered=No)
+- [AutoMapper Docs](https://docs.automapper.org/en/latest/)
