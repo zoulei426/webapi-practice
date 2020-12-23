@@ -3,7 +3,7 @@
  * @Author: zoulei
  * @Date: 2020-12-18 13:26:04
  * @LastEditors: zoulei
- * @LastEditTime: 2020-12-23 10:02:57
+ * @LastEditTime: 2020-12-23 10:22:34
 -->
 
 # 基于 ABP vNext 的 Web API 开发教程
@@ -1303,4 +1303,5 @@ Post 请求：
 - [ABP Framework Docs](https://docs.abp.io/zh-Hans/abp/latest/Getting-Started?UI=MVC&DB=EF&Tiered=No)
 - [AutoMapper Docs](https://docs.automapper.org/en/latest/)
 
-<a name="f1">1</a>: 如果把聚合比作组织，聚合根则是组织的负责人，聚合根也叫做根实体，它不仅仅是实体，还是实体的管理者。让实体和值对象协同工作的组织就是聚合，用来确保这些领域对象在实现公共的业务逻辑的时候，可以保持数据的一致性。[?](#a1)
+> 脚注：  
+> <a name="f1">1</a>: 如果把聚合比作组织，聚合根则是组织的负责人，聚合根也叫做根实体，它不仅仅是实体，还是实体的管理者。让实体和值对象协同工作的组织就是聚合，用来确保这些领域对象在实现公共的业务逻辑的时候，可以保持数据的一致性。[:back:](#a1)
