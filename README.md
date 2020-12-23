@@ -150,7 +150,7 @@ namespace YuLinTu.Practice.Books
 }
 ```
 
-- ABP 为实体提供了两个基本的基类: AggregateRoot 和 Entity。AggregateRoot 即领域驱动设计中的聚合根<sup>[1](#aggregate_root)</sup>。
+- ABP 为实体提供了两个基本的基类: AggregateRoot 和 Entity。AggregateRoot 即领域驱动设计中的聚合根<sup id="a1">[1](#f1)</sup>。
 - Audited 前缀在 AggregateRoot / Entity 类的基础上添加了一些审计属性(CreationTime, CreatorId, LastModificationTime 等)。
 - Guid 是 Book 实体的主键类型。**不要为你的实体使用 Guid.NewGuid() 创建 ID，当需要手动设置实体的 ID 时，请使用 IGuidGenerator.Create()。**
 
@@ -1303,4 +1303,4 @@ Post 请求：
 - [ABP Framework Docs](https://docs.abp.io/zh-Hans/abp/latest/Getting-Started?UI=MVC&DB=EF&Tiered=No)
 - [AutoMapper Docs](https://docs.automapper.org/en/latest/)
 
-<a name="aggregate_root">1</a>: 如果把聚合比作组织，聚合根则是组织的负责人，聚合根也叫做根实体，它不仅仅是实体，还是实体的管理者。让实体和值对象协同工作的组织就是聚合，用来确保这些领域对象在实现公共的业务逻辑的时候，可以保持数据的一致性。[?](#aggregate_root)
+<a name="f1">1</a>: 如果把聚合比作组织，聚合根则是组织的负责人，聚合根也叫做根实体，它不仅仅是实体，还是实体的管理者。让实体和值对象协同工作的组织就是聚合，用来确保这些领域对象在实现公共的业务逻辑的时候，可以保持数据的一致性。[?](#a1)
